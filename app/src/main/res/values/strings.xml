@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">project183</string>
+    <string name="edtPhone">Số điện thoại</string>
+    <string name="btnSendOTP"> Gửi mã OTP </string>
+</resources>

@@ -8,77 +8,93 @@
     tools:context=".Activity.IntroActivity">
 
     <ImageView
+        android:id="@+id/imageView7"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@null"
         android:scaleType="fitXY"
         android:src="@drawable/orange_background"
-        android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-    android:id="@+id/txtOTPTitle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Nhập mã xác thực"
-    android:textSize="22sp"
-    android:textStyle="bold"
-    android:textColor="@android:color/white"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:layout_marginTop="60dp" />
+        android:id="@+id/txtOTPTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:text="@string/verifyTitle"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/otpContainer"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="6"
         app:layout_constraintTop_toBottomOf="@id/txtOTPTitle"
+        app:layout_constraintBottom_toTopOf="@+id/btnVerify"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <!-- 6 EditText cho mã OTP -->
         <EditText
             android:id="@+id/otp1"
-            style="@style/OtpEditTextStyle" />
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            style="@style/OtpEditTextStyle"
+        />
 
         <EditText
             android:id="@+id/otp2"
-            style="@style/OtpEditTextStyle" />
+            style="@style/OtpEditTextStyle"
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
 
         <EditText
             android:id="@+id/otp3"
-            style="@style/OtpEditTextStyle" />
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            style="@style/OtpEditTextStyle"
+        />
 
         <EditText
             android:id="@+id/otp4"
-            style="@style/OtpEditTextStyle" />
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            style="@style/OtpEditTextStyle"
+        />
 
         <EditText
             android:id="@+id/otp5"
-            style="@style/OtpEditTextStyle" />
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            style="@style/OtpEditTextStyle"
+        />
 
         <EditText
             android:id="@+id/otp6"
-            style="@style/OtpEditTextStyle" />
+            android:autofillHints=""
+            tools:ignore="LabelFor"
+            style="@style/OtpEditTextStyle"
+        />
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnVerify"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Xác nhận"
-        android:backgroundTint="@android:color/holo_orange_dark"
-        android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/otpContainer"
-        app:layout_constraintStart_toStartOf="parent"
+        style="@style/OtpBtnStyle"
+        android:layout_marginBottom="50dp"
+        android:text="@string/btnVerifyOTP"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

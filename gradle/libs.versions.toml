@@ -11,11 +11,15 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.5.1"
+mapboxMapsSdk = "10.16.0"
+mapboxJavaSdkServices = "6.11.0"
+mapboxSdkGeojson = "7.4.0"
 material = "1.5.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 googleServices = "4.4.1"
 firebaseDatabase = "20.3.1"
+volley = "1.2.1"
 
 [libraries]
 chip-navigation-bar = { module = "com.github.ismaeldivita:chip-navigation-bar", version.ref = "chipNavigationBar" }
@@ -29,12 +33,17 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+mapbox-maps-android = { module = "com.mapbox.maps:android", version.ref = "mapboxMapsSdk" }
+mapbox-java-services = { module = "com.mapbox.mapboxsdk:mapbox-sdk-services", version.ref = "mapboxJavaSdkServices" }
+mapbox-java-geocoding = { module = "com.mapbox.mapboxsdk:mapbox-sdk-services-geocoding", version.ref = "mapboxJavaSdkServices" }
+mapbox-sdk-geojson = { module = "com.mapbox.mapboxsdk:mapbox-sdk-geojson", version.ref = "mapboxSdkGeojson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version = "22.3.1" }
+volley = { module = "com.android.volley:volley", version.ref = "volley" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

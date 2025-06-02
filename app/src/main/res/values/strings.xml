@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">project183</string>
-    <string name="edtPhone">Số điện thoại</string>
-    <string name="btnSendOTP"> Gửi mã OTP </string>
+    <string name="signInTitle" translatable="false">Đăng nhập</string>
+    <string name="edtPhone" translatable="false">Số điện thoại</string>
+    <string name="btnSendOTP" translatable="false"> Gửi mã OTP </string>
+    <string name="verifyTitle" translatable="false">Nhập mã OTP</string>
+    <string name="btnVerifyOTP" translatable="false">Xác nhận</string>
 </resources>

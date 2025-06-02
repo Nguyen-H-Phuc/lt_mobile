@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--Khai báo quyền sử dụng internet-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--Khai báo quyền sử dụng định vị-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -34,6 +40,9 @@
             android:name=".Activity.OTPVerificationActivity"
             android:exported="false"/>
         <activity
+            android:name=".Activity.CheckoutActivity"
+            android:exported="false"/>
+        <activity
             android:name=".Activity.IntroActivity"
             android:exported="true">
             <intent-filter>
@@ -42,6 +51,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

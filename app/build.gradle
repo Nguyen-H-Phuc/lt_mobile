@@ -41,4 +41,8 @@ dependencies {
     implementation libs.glide
     implementation libs.firebase.auth.v2321
     implementation libs.core.ktx
+    implementation libs.mapbox.maps.android
+    implementation libs.mapbox.java.services
+    implementation libs.mapbox.sdk.geojson
+    implementation libs.volley
 }

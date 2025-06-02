@@ -6,15 +6,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.project183.R;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.project183.service.UserAuthService;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 public class OTPVerificationActivity extends AppCompatActivity {
-
     private EditText otp1, otp2, otp3, otp4, otp5, otp6;
     private Button btnVerify;
 
@@ -43,17 +44,20 @@ public class OTPVerificationActivity extends AppCompatActivity {
 
             if (code.length() == 6) {
                 String verificationId = getIntent().getStringExtra("verificationId");
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-                FirebaseAuth.getInstance().signInWithCredential(credential)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                // Đăng nhập thành công
-                                startActivity(new Intent(this, MainActivity.class));
-                                finish();
-                            } else {
-                                Toast.makeText(this, "Mã OTP không đúng", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                new UserAuthService().verifyCode(verificationId, code, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    @Override
+                    public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                        Intent intent = new Intent(OTPVerificationActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+
+
+                    @Override
+                    public void onVerificationFailed(@NonNull FirebaseException e) {
+                        Toast.makeText(OTPVerificationActivity.this, "Xác minh thất bại: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             } else {
                 Toast.makeText(this, "Vui lòng nhập đủ 6 số", Toast.LENGTH_SHORT).show();
             }

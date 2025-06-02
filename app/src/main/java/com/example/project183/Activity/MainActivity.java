@@ -2,6 +2,7 @@ package com.example.project183.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,8 +15,11 @@ import com.example.project183.Adapter.CategoryAdapter;
 import com.example.project183.Adapter.SliderAdapter;
 import com.example.project183.Domain.Category;
 import com.example.project183.Domain.SliderItems;
+import com.example.project183.Domain.User;
 import com.example.project183.R;
 import com.example.project183.databinding.ActivityMainBinding;
+import com.example.project183.service.UserAuthService;
+import com.example.project183.service.UserCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +30,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
     ActivityMainBinding binding;
+    private UserAuthService userAuthService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +38,23 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        userAuthService = new UserAuthService();
+        userAuthService.getUserToRealtimeDatabase(user -> {
 
+            if (user != null) {
+                Log.d("DEBUG_USER", "User: " + (user != null ? user.getPhoneNumber() : "null"));
+                if (user.getName() != null && !user.getName().isEmpty()) {
+                    binding.textView2.setText(user.getName());
+                } else if (user.getPhoneNumber() != null && !user.getPhoneNumber().isEmpty()) {
+                    binding.textView2.setText(user.getPhoneNumber());
+                } else {
+                    binding.textView2.setText("");
+                }
+            }
+            else {
+                binding.textView2.setText("");
+            }
+        });
         initCategory();
         initBanner();
         setVariable();

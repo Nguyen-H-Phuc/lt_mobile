@@ -3,12 +3,14 @@ package com.example.project183.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.project183.Adapter.CartAdapter;
 import com.example.project183.Helper.ChangeNumberItemsListener;
 import com.example.project183.Helper.ManagmentCart;
+import com.example.project183.R;
 import com.example.project183.databinding.ActivityCartBinding;
 
 public class CartActivity extends BaseActivity {
@@ -26,6 +28,13 @@ public class CartActivity extends BaseActivity {
         setVariable();
         calculateCart();
         initCartList();
+
+        // Ví dụ: khi nhấn nút đặt hàng thì ghi dữ liệu lên Firebase
+        Button orderBtn = findViewById(R.id.checkOutBtn);
+        orderBtn.setOnClickListener(v -> {
+            startActivity(new Intent(this, CheckoutActivity.class));
+            finish();
+        });
     }
 
     private void initCartList() {

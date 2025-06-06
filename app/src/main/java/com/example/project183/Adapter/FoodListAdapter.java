@@ -21,11 +21,13 @@ import com.example.project183.R;
 import java.util.ArrayList;
 
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.viewholder> {
-    ArrayList<Foods> items;
-    Context context;
+    private ArrayList<Foods> items;
+    private ArrayList<Foods> originalList; // Danh sách gốc
+    private Context context;
 
     public FoodListAdapter(ArrayList<Foods> items) {
-        this.items = items;
+        this.items = new ArrayList<>(items);
+        this.originalList = new ArrayList<>(items);
     }
 
     @NonNull
@@ -37,19 +39,21 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.viewho
 
     @Override
     public void onBindViewHolder(@NonNull FoodListAdapter.viewholder holder, int position) {
-        holder.titleTxt.setText(items.get(position).getTitle());
-        holder.timeTxt.setText(items.get(position).getTimeValue() + " min");
-        holder.priceTxt.setText("$" + items.get(position).getPrice());
-        holder.rateTxt.setText("" + items.get(position).getStar());
+        Foods food = items.get(position);
+
+        holder.titleTxt.setText(food.getTitle());
+        holder.timeTxt.setText(food.getTimeValue() + " min");
+        holder.priceTxt.setText("$" + food.getPrice());
+        holder.rateTxt.setText("" + food.getStar());
 
         Glide.with(context)
-                .load(items.get(position).getImagePath())
+                .load(food.getImagePath())
                 .transform(new CenterCrop(), new RoundedCorners(50))
                 .into(holder.pic);
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra("object", items.get(position));
+            intent.putExtra("object", food);
             context.startActivity(intent);
         });
     }
@@ -57,6 +61,24 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.viewho
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    // ✅ Hàm lọc tìm kiếm theo từ khóa
+    public void filter(String keyword) {
+        keyword = keyword.toLowerCase().trim();
+        items.clear();
+
+        if (keyword.isEmpty()) {
+            items.addAll(originalList);
+        } else {
+            for (Foods item : originalList) {
+                if (item.getTitle().toLowerCase().contains(keyword)) {
+                    items.add(item);
+                }
+            }
+        }
+
+        notifyDataSetChanged();
     }
 
     public class viewholder extends RecyclerView.ViewHolder {

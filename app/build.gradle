@@ -45,4 +45,6 @@ dependencies {
     implementation libs.mapbox.java.services
     implementation libs.mapbox.sdk.geojson
     implementation libs.volley
+    implementation libs.firebase.firestore
+    implementation libs.firebase.storage
 }

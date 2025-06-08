@@ -8,7 +8,6 @@ import android.widget.Button;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.project183.Adapter.CartAdapter;
-import com.example.project183.Helper.ChangeNumberItemsListener;
 import com.example.project183.Helper.ManagmentCart;
 import com.example.project183.R;
 import com.example.project183.databinding.ActivityCartBinding;
@@ -29,7 +28,7 @@ public class CartActivity extends BaseActivity {
         calculateCart();
         initCartList();
 
-        // Ví dụ: khi nhấn nút đặt hàng thì ghi dữ liệu lên Firebase
+        // Chuyển sang màn hình đặt hàng
         Button orderBtn = findViewById(R.id.checkOutBtn);
         orderBtn.setOnClickListener(v -> {
             startActivity(new Intent(this, CheckoutActivity.class));
@@ -47,23 +46,18 @@ public class CartActivity extends BaseActivity {
 
         }
         binding.cartView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        binding.cartView.setAdapter(new CartAdapter(managmentCart.getListCart(),managmentCart , () -> calculateCart()));
+        binding.cartView.setAdapter(new CartAdapter(managmentCart.getListCart(),managmentCart , this::calculateCart));
     }
 
     private void calculateCart() {
         double percentTax = 0.02;  //percent 2% tax
         double delivery = 10;  //10 Dollar
-        double tax = Math.round(managmentCart.getTotalFee() * percentTax * 100.0) / 100;
-        double total = Math.round((managmentCart.getTotalFee() + tax + delivery) * 100) / 100;
-        double itemTotal = Math.round(managmentCart.getTotalFee() * 100) / 100;
 
-        binding.totalFeeTxt.setText("$" + itemTotal);
-        binding.taxTxt.setText("$" + tax);
-        binding.deliveryTxt.setText("$" + delivery);
-        binding.totalTxt.setText("$" + total);
+        double total = Math.round((managmentCart.getTotalFee()) * 100) / 100;
+        double itemTotal = Math.round(managmentCart.getTotalFee() * 100) / 100;
     }
 
     private void setVariable() {
-        binding.backBtn.setOnClickListener(v -> startActivity(new Intent(CartActivity.this,MainActivity.class)));
+        binding.backBtn.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, MainActivity.class)));
     }
 }

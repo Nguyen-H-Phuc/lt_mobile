@@ -43,6 +43,11 @@
             android:name=".Activity.CheckoutActivity"
             android:exported="false"/>
         <activity
+            android:name=".Activity.MapActivity"
+            android:exported="false"/>
+        <activity android:name=".Activity.OrderSuccessActivity"
+            android:exported="false"/>
+        <activity
             android:name=".Activity.IntroActivity"
             android:exported="true">
             <intent-filter>
@@ -52,6 +57,9 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="com.mapbox.token"
+            android:value="@string/mapbox_access_token"/>
     </application>
 
 </manifest>

@@ -12,7 +12,7 @@
         android:id="@+id/emptyTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your cart is Empty"
+        android:text="@string/cart_empty"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +43,7 @@
                     android:id="@+id/backBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -52,7 +53,7 @@
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cart"
+                    android:text="@string/cart_title"
                     android:textColor="@color/dark_blue"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -70,139 +71,13 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="16dp" />
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:text="Order Summary"
-                android:textColor="@color/dark_blue"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:background="@drawable/white_bg">
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Subtotal"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/totalFeeTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="$-"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Delivery"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="@+id/textView7"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-                <TextView
-                    android:id="@+id/deliveryTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="$-"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/totalFeeTxt"
-                    app:layout_constraintTop_toBottomOf="@+id/totalFeeTxt" />
-
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Total Tax"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="@+id/textView11"
-                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-                <TextView
-                    android:id="@+id/taxTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="$-"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/deliveryTxt"
-                    app:layout_constraintTop_toBottomOf="@+id/deliveryTxt" />
-
-                <View
-                    android:id="@+id/view2"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="#ABABAB"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView14" />
-
-                <TextView
-                    android:id="@+id/textView16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="Total"
-                    android:textColor="@color/dark_blue"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/view2"
-                    app:layout_constraintTop_toBottomOf="@+id/view2"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/totalTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="$-"
-                    android:textColor="@color/red"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView16"
-                    app:layout_constraintEnd_toEndOf="@+id/view2"
-                    app:layout_constraintTop_toTopOf="@+id/textView16" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/checkOutBtn"
-                style="@android:style/Widget.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:background="@drawable/red_bg_full_corner"
-                android:text="Check out"
+                android:text="@string/cart_order_btn"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </LinearLayout>

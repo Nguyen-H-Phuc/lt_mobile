@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSendOTP.setOnClickListener(v -> {
             phoneNumber = edtPhone.getText().toString().trim();
             if(phoneNumber.startsWith("0")){
-                phoneNumber = phoneNumber.substring(1,9);
+                phoneNumber = phoneNumber.substring(1);
             }
             if (!phoneNumber.isEmpty()) {
                 new androidx.appcompat.app.AlertDialog.Builder(this)

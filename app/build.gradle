@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -29,6 +30,9 @@ android {
     buildFeatures{
         viewBinding true
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
@@ -45,4 +49,15 @@ dependencies {
     implementation libs.mapbox.java.services
     implementation libs.mapbox.sdk.geojson
     implementation libs.volley
+    implementation libs.legacy.support.v4
+    implementation "com.mapbox.search:autofill:2.12.0-beta.1"
+    implementation "com.mapbox.search:discover:2.12.0-beta.1"
+    implementation "com.mapbox.search:place-autocomplete:2.12.0-beta.1"
+    implementation "com.mapbox.search:offline:2.12.0-beta.1"
+    implementation "com.mapbox.search:mapbox-search-android:2.12.0-beta.1"
+    implementation "com.mapbox.search:mapbox-search-android-ui:2.12.0-beta.1"
+    implementation libs.lifecycle.runtime.android
+    implementation libs.play.services.location
+    implementation libs.core
+
 }

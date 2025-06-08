@@ -1,14 +1,22 @@
 package com.example.project183.Activity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project183.Adapter.OrderAdapter;
 import com.example.project183.Domain.Foods;
+import com.example.project183.Domain.OrderFood;
 import com.example.project183.Helper.ManagementOrder;
 import com.example.project183.Helper.ManagmentCart;
 import com.example.project183.Helper.MapboxHelper;
@@ -21,85 +29,143 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CheckoutActivity extends AppCompatActivity {
-    private EditText editName, editPhone, editAddress;
-    private TextView totalPriceText;
+
+    private RecyclerView recyclerView;
+    private OrderAdapter adapter;
+
+    private TextView edtPriceListFood, addressLabel, edtAddress, edtDeliveryFee, edtDeliveryTime, edtTotalPrice;
     private Button buttonPlaceOrder;
     private ManagmentCart managmentCart;
     private ManagementOrder managementOrder;
+    private ActivityResultLauncher<Intent> mapActivityLauncher;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-
-//        editName = findViewById(R.editName);
-        editPhone = findViewById(R.id.editPhone);
-        editAddress = findViewById(R.id.editAddress);
-        totalPriceText = findViewById(R.id.totalPriceText);
-        buttonPlaceOrder = findViewById(R.id.buttonPlaceOrder);
-
         managmentCart = new ManagmentCart(this);
-        double total = managmentCart.getTotalFee();
-        totalPriceText.setText("Tổng tiền: " + total + "đ");
-        buttonPlaceOrder.setOnClickListener(v -> placeOrder(total));
-    }
-
-    private void placeOrder(double total){
         managementOrder = new ManagementOrder();
-        String phone = editPhone.getText().toString().trim();
-        String address = editAddress.getText().toString().trim();
-
-        if( phone.isEmpty() || address.isEmpty()) {
-            Toast.makeText(this, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
-            return;
+        recyclerView = findViewById(R.id.list_item);
+        ArrayList<Foods> cartList = managmentCart.getListCart();
+        List<OrderFood> orderFoods = new ArrayList<>();
+        for (Foods food : cartList) {
+            OrderFood orderFood = new OrderFood(
+                    food.getId(),
+                    food.getTitle(),
+                    food.getPrice(),
+                    food.getNumberInCart(),
+                    food.getImagePath()
+            );
+            orderFoods.add(orderFood);
         }
-        MapboxHelper.geocodeAddress(this, address, new Callback<GeocodingResponse>() {
-            @Override
-            public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
-                if (response.isSuccessful() && response.body() != null && !response.body().features().isEmpty()) {
-                    Point origin = response.body().features().get(0).center();
-                    Point destination = Point.fromLngLat(106.7000, 10.7769);
+        Log.d("MainActivity", "orderFoods size = " + orderFoods.size());
+        for (OrderFood food : orderFoods) {
+            Log.d("MainActivity", "Food: " + food.getTitle() + ", qty: " + food.getQuantity());
+        }
 
-                    MapboxHelper.calculateDistance(getApplicationContext(), origin, destination, new MapboxHelper.DistanceCallback() {
-                        @Override
-                        public void onSuccess(double distanceInKm) {
-                            Toast.makeText(getApplicationContext(), "Khoảng cách: " + distanceInKm + " km", Toast.LENGTH_LONG).show();
-                            proceedWithOrder(distanceInKm, address);
-                        }
+        adapter = new OrderAdapter(orderFoods);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
 
-                        @Override
-                        public void onFailure(String errorMessage) {
-                            Toast.makeText(getApplicationContext(), "Lỗi: " + errorMessage, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Không tìm được địa chỉ", Toast.LENGTH_SHORT).show();
+        edtPriceListFood = findViewById(R.id.priceListFood);
+        addressLabel = findViewById(R.id.addressLabel);
+        edtAddress = findViewById(R.id.address);
+        edtDeliveryFee = findViewById(R.id.deliveryFee);
+        edtDeliveryTime = findViewById(R.id.deliveryTime);
+        edtTotalPrice = findViewById(R.id.totalPrice);
+        buttonPlaceOrder = findViewById(R.id.checkOutBtn);
+
+
+        double total = managmentCart.getTotalFee();
+        edtPriceListFood.setText(total + " $");
+        mapActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String address = result.getData().getStringExtra("selected_address");
+                    if (address != null) {
+                        // Xử lý hiển thị địa chỉ
+                        edtAddress.setText(address);
+                        MapboxHelper.geocodeAddress(this,address, new Callback<GeocodingResponse>() {
+                            @Override
+                            public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
+                                Point origin = response.body().features().get(0).center();
+                                MapboxHelper.getRoute(CheckoutActivity.this, origin, new MapboxHelper.RouteResultCallback() {
+                                    @Override
+                                    public void onRouteFound(int durationInMinutes, int distanceInKm) {
+                                        double deliveryFee = distanceInKm * 0.5;
+                                        edtDeliveryFee.setText(deliveryFee + " $");
+                                        edtDeliveryTime.setText(durationInMinutes + " minutes");
+                                        edtTotalPrice.setText((managmentCart.getTotalFee() + deliveryFee)+ " $");
+                                    }
+
+                                    @Override
+                                    public void onError(String message) {
+                                        Toast.makeText(CheckoutActivity.this, "Lỗi: " + message, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }
+                            @Override
+                            public void onFailure(Call<GeocodingResponse> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
                 }
             }
+        );
 
-            @Override
-            public void onFailure(Call<GeocodingResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+        addressLabel.setOnClickListener(view -> {
+            Intent intent = new Intent(CheckoutActivity.this, MapActivity.class);
+            mapActivityLauncher.launch(intent);
         });
+        buttonPlaceOrder.setOnClickListener(view -> {
+            proceedWithOrder(orderFoods);
+        });
+
     }
 
-    // Thêm tham số địa chỉ để gửi đơn
-    private void proceedWithOrder(double distanceInKm, String address) {
-        double shippingFee = distanceInKm * 5000; // 5000đ mỗi km
-        double total = managmentCart.getTotalFee() + shippingFee;
-        totalPriceText.setText("Tổng tiền (đã cộng phí vận chuyển): " + total + "đ");
+    private void proceedWithOrder(List<OrderFood> orderFoods) {
+        String address = edtAddress.getText().toString().trim();
 
-        ArrayList<Foods> cartList = managmentCart.getListCart();
+        String priceRaw = edtPriceListFood.getText().toString().trim();
+        String feeRaw = edtDeliveryFee.getText().toString().trim();
+        String timeRaw = edtDeliveryTime.getText().toString().trim();
+        String totalRaw = edtTotalPrice.getText().toString().trim();
 
-        if (cartList != null && !cartList.isEmpty()) {
-            managementOrder.sendOrderToFireBase("user123", address, cartList, total, 100);
+        if (address.isEmpty() || priceRaw.isEmpty() || feeRaw.isEmpty() || timeRaw.isEmpty() || totalRaw.isEmpty()) {
+            Toast.makeText(this, "Vui lòng điền đầy đủ thông tin đơn hàng!", Toast.LENGTH_LONG).show();
+            return;
         }
 
-        Toast.makeText(this, "Đơn hàng đã được đặt!", Toast.LENGTH_LONG).show();
-        finish();
+        try {
+            String priceClean = priceRaw.replaceAll("[ $]", "").replace(",", ".");
+            double priceListFood = Double.parseDouble(priceClean);
+
+            String feeClean = feeRaw.replaceAll("[ $]", "").replace(",", ".");
+            double deliveryFee = Double.parseDouble(feeClean);
+
+            String timeClean = timeRaw.replaceAll(" minutes", "").trim();
+            int deliveryTime = Integer.parseInt(timeClean);
+
+            String totalClean = totalRaw.replaceAll("[ $]", "").replace(",", ".");
+            double totalPrice = Double.parseDouble(totalClean);
+
+            managementOrder.sendOrderToFireBase(this, address, orderFoods, priceListFood, deliveryFee, deliveryTime, totalPrice);
+        } catch (NumberFormatException e) {
+            Log.e("Checkout", "Lỗi parse số: " + e.getMessage());
+            Toast.makeText(this, "Giá trị số không hợp lệ! " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Log.e("Checkout", "Lỗi không xác định: ", e);
+            Toast.makeText(this, "Có lỗi xảy ra khi xử lý đơn hàng.", Toast.LENGTH_LONG).show();
+        }
+
     }
 
 }

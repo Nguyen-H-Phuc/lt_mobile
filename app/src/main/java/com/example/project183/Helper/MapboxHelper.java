@@ -2,70 +2,77 @@ package com.example.project183.Helper;
 
 import android.content.Context;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import androidx.annotation.NonNull;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.project183.R;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.MapboxDirections;
+import com.mapbox.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.geojson.Point;
 
+import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
-import java.util.Locale;
+import java.util.Arrays;
 
 public class MapboxHelper {
 
-    public interface DistanceCallback {
-        void onSuccess(double distanceInKm);
-        void onFailure(String errorMessage);
+    public interface RouteResultCallback {
+        void onRouteFound(int durationInMinutes, int distanceInKm);
+        void onError(String message);
     }
 
-    public static void calculateDistance(Context context, Point origin, Point destination, DistanceCallback callback) {
-        String accessToken = "pk.eyJ1IjoicGh1YzA1MTEyMDA0IiwiYSI6ImNtYmVpbjQybzFkMHEycG9jbTRvaDA0dXIifQ.KLFmE6u82cl6wpU8Vxcl9Q";
-        String url = String.format(Locale.US,
-                "https://api.mapbox.com/directions/v5/mapbox/driving/%f,%f;%f,%f?access_token=%s",
-                origin.longitude(), origin.latitude(),
-                destination.longitude(), destination.latitude(),
-                accessToken);
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        JSONArray routes = response.getJSONArray("routes");
-                        if (routes.length() > 0) {
-                            JSONObject route = routes.getJSONObject(0);
-                            double distanceMeters = route.getDouble("distance");
-                            double distanceKm = distanceMeters / 1000.0;
-                            callback.onSuccess(distanceKm);
-                        } else {
-                            callback.onFailure("No route found.");
-                        }
-                    } catch (JSONException e) {
-                        callback.onFailure("Parse error: " + e.getMessage());
-                    }
-                },
-                error -> callback.onFailure("API error: " + error.toString())
-        );
-
-        queue.add(jsonRequest);
-    }
-
+    //Mã hoá địa chỉ thành toạ độ trên bảng đồ
     public static void geocodeAddress(Context context, String address, Callback<GeocodingResponse> callback) {
         MapboxGeocoding geocoding = MapboxGeocoding.builder()
-                .accessToken("pk.eyJ1IjoicGh1YzA1MTEyMDA0IiwiYSI6ImNtYmVpbjQybzFkMHEycG9jbTRvaDA0dXIifQ.KLFmE6u82cl6wpU8Vxcl9Q")
+                .accessToken(context.getString(R.string.mapbox_access_token))
                 .query(address)
                 .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
                 .build();
-
         geocoding.enqueueCall(callback);
+    }
+
+    // tính lấy khoảng cách và thời gian đi lại giữa 2 điểm trong mapbox
+    public static void getRoute(Context context,Point destination, RouteResultCallback callback) {
+        Point origin = Point.fromLngLat(106.58166, 10.90045); // Tọa độ điểm đi
+
+        MapboxDirections client = MapboxDirections.builder()
+                .accessToken(context.getString(R.string.mapbox_access_token))
+                .routeOptions(
+                        RouteOptions.builder()
+                                .coordinatesList(Arrays.asList(origin, destination))
+                                .profile(DirectionsCriteria.PROFILE_DRIVING)
+                                .overview(DirectionsCriteria.OVERVIEW_FULL)
+                                .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+                                .build()
+                )
+                .build();
+
+        client.enqueueCall(new Callback<DirectionsResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<DirectionsResponse> call, @NonNull Response<DirectionsResponse> response) {
+                if (response.body() != null && !response.body().routes().isEmpty()) {
+                    DirectionsRoute route = response.body().routes().get(0);
+                    int durationInMinutes = (int) (route.duration() / 60); // thời gian tính bằng giây
+                    int distanceInKilomet = (int) (route.distance() / 1000);// khoảng cách tính bằng km
+                    callback.onRouteFound(durationInMinutes, distanceInKilomet);
+                } else {
+                    System.out.println("Không tìm thấy route.");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DirectionsResponse> call, @NonNull Throwable t) {
+                callback.onError(t.getMessage());
+            }
+
+        });
     }
 
 }

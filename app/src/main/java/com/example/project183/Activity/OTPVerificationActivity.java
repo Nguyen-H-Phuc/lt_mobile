@@ -17,7 +17,6 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 public class OTPVerificationActivity extends AppCompatActivity {
     private EditText otp1, otp2, otp3, otp4, otp5, otp6;
-    private Button btnVerify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,7 @@ public class OTPVerificationActivity extends AppCompatActivity {
         otp4 = findViewById(R.id.otp4);
         otp5 = findViewById(R.id.otp5);
         otp6 = findViewById(R.id.otp6);
-        btnVerify = findViewById(R.id.btnVerify);
+        Button btnVerify = findViewById(R.id.btnVerify);
 
         setupOtpInputs();
 
@@ -65,11 +64,12 @@ public class OTPVerificationActivity extends AppCompatActivity {
     }
 
     private void setupOtpInputs() {
-        otp1.addTextChangedListener(new GenericTextWatcher(otp1, otp2));
-        otp2.addTextChangedListener(new GenericTextWatcher(otp2, otp3));
-        otp3.addTextChangedListener(new GenericTextWatcher(otp3, otp4));
-        otp4.addTextChangedListener(new GenericTextWatcher(otp4, otp5));
-        otp5.addTextChangedListener(new GenericTextWatcher(otp5, otp6));
+        otp1.addTextChangedListener(new GenericTextWatcher(otp2, null));
+        otp2.addTextChangedListener(new GenericTextWatcher(otp3, otp1));
+        otp3.addTextChangedListener(new GenericTextWatcher(otp4, otp2));
+        otp4.addTextChangedListener(new GenericTextWatcher(otp5, otp3));
+        otp5.addTextChangedListener(new GenericTextWatcher(otp6, otp4));
+        otp6.addTextChangedListener(new GenericTextWatcher(null, otp5));
     }
 
 }

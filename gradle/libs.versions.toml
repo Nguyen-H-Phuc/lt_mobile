@@ -11,7 +11,7 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.5.1"
-mapboxMapsSdk = "10.16.0"
+mapboxMapsSdk = "11.12.2"
 mapboxJavaSdkServices = "6.11.0"
 mapboxSdkGeojson = "7.4.0"
 material = "1.5.0"
@@ -20,11 +20,16 @@ constraintlayout = "2.1.4"
 googleServices = "4.4.1"
 firebaseDatabase = "20.3.1"
 volley = "1.2.1"
+legacySupportV4 = "1.0.0"
+lifecycleRuntimeAndroid = "2.9.0"
+kotlin = "2.1.21"
+playServicesLocation = "21.3.0"
 firebaseFirestore = "25.1.4"
 firebaseStorage = "21.0.2"
 
 [libraries]
 chip-navigation-bar = { module = "com.github.ismaeldivita:chip-navigation-bar", version.ref = "chipNavigationBar" }
+core = { module = "androidx.core:core", version.ref = "coreKtx" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 firebase-auth-v2230 = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-auth-v2321 = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuthVersion" }
@@ -46,9 +51,14 @@ google-services = { group = "com.google.gms", name = "google-services", version.
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version = "22.3.1" }
 volley = { module = "com.android.volley:volley", version.ref = "volley" }
+legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+lifecycle-runtime-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-android", version.ref = "lifecycleRuntimeAndroid" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

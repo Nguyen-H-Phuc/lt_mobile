@@ -15,15 +15,20 @@ import com.example.project183.Adapter.CategoryAdapter;
 import com.example.project183.Adapter.SliderAdapter;
 import com.example.project183.Domain.Category;
 import com.example.project183.Domain.SliderItems;
+import com.example.project183.R;
+import com.example.project183.databinding.ActivityMainBinding;
+import com.example.project183.service.UserAuthService;
 // import com.example.project183.Domain.User; // Không cần import lại ở đây nếu BaseActivity đã có
 import com.example.project183.R;
 import com.example.project183.databinding.ActivityMainBinding;
 import com.example.project183.service.UserAuthService;
 // import com.example.project183.service.UserCallback; // Không thấy được sử dụng trực tiếp
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 // import com.ismaeldivita.chipnavigation.ChipNavigationBar; // Không cần import nếu binding đã có
 
 import java.util.ArrayList;
@@ -41,19 +46,23 @@ public class MainActivity extends BaseActivity {
         userAuthService = new UserAuthService();
         // Lấy thông tin người dùng và hiển thị
         userAuthService.getUserToRealtimeDatabase(user -> {
+            // kiểm tra thông tin người dùng
             if (user != null) {
-                Log.d("DEBUG_USER", "User from Auth Service: " + user.getName() + " | Phone: " + user.getPhoneNumber());
-                // Ưu tiên hiển thị tên, sau đó đến số điện thoại
+                Log.d("DEBUG_USER", "User: " + user.getPhoneNumber());
+                // set tên nguười dùng nếu người dùng có tên
                 if (user.getName() != null && !user.getName().isEmpty()) {
-                    binding.textView2.setText(user.getName()); // Giả sử textView2 là để hiển thị tên/SĐT
-                } else if (user.getPhoneNumber() != null && !user.getPhoneNumber().isEmpty()) {
+                    binding.textView2.setText(user.getName());
+                } // không tìm thấy tên thì set số điện thoại
+                else if (user.getPhoneNumber() != null && !user.getPhoneNumber().isEmpty()) {
                     binding.textView2.setText(user.getPhoneNumber());
-                } else {
-                    binding.textView2.setText("Welcome"); // Hoặc một lời chào chung
+                } // để trống nếu không tìm thấy tên và thuộc tính
+                else {
+                    binding.textView2.setText("");
                 }
-            } else {
-                Log.d("DEBUG_USER", "User is null from Auth Service.");
-                binding.textView2.setText("Welcome"); // Hoặc để trống
+            }
+            // Không tìm thấy người dùng thì để trống
+            else {
+                binding.textView2.setText("");
             }
         });
 
@@ -141,6 +150,7 @@ public class MainActivity extends BaseActivity {
                             list.add(category);
                         }
                     }
+
                     if (!list.isEmpty()) { // Kiểm tra list không rỗng
                         binding.categoryView.setLayoutManager(new GridLayoutManager(MainActivity.this, 4)); // Thử 4 cột nếu item nhỏ
                         binding.categoryView.setAdapter(new CategoryAdapter(list));

@@ -79,7 +79,7 @@ public class EditProfileActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) {
-            userDbRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUid());
+            userDbRef = FirebaseDatabase.getInstance().getReference("user").child(currentUser.getUid());
         } else {
             Toast.makeText(this, "User not logged in. Cannot edit profile.", Toast.LENGTH_LONG).show();
             finish(); // Kết thúc activity nếu không có người dùng

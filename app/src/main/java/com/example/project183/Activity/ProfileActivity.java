@@ -58,7 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUserForDB = mAuth.getCurrentUser();
         if (currentUserForDB != null) {
-            userDbRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUserForDB.getUid());
+            userDbRef = FirebaseDatabase.getInstance().getReference("user").child(currentUserForDB.getUid());
         } else {
             // Xử lý trường hợp không có người dùng đăng nhập ngay từ đầu
             Toast.makeText(this, "No user signed in. Redirecting to login.", Toast.LENGTH_LONG).show();

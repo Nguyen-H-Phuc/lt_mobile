@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="orderIdTxt" type="id" />
+    <item name="orderDateTxt" type="id" />
+    <item name="orderTotalTxt" type="id" />
+    <item name="orderStatusTxt" type="id" />
+    <item name="detailsBtn" type="id" />
+</resources>

@@ -24,6 +24,8 @@ legacySupportV4 = "1.0.0"
 lifecycleRuntimeAndroid = "2.9.0"
 kotlin = "2.1.21"
 playServicesLocation = "21.3.0"
+firebaseFirestore = "25.1.4"
+firebaseStorage = "21.0.2"
 
 [libraries]
 chip-navigation-bar = { module = "com.github.ismaeldivita:chip-navigation-bar", version.ref = "chipNavigationBar" }
@@ -52,6 +54,9 @@ volley = { module = "com.android.volley:volley", version.ref = "volley" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 lifecycle-runtime-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-android", version.ref = "lifecycleRuntimeAndroid" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

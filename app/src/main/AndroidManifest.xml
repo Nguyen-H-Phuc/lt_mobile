@@ -56,10 +56,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Activity.ProfileActivity"
+            android:label="User Profile"
+            android:parentActivityName=".Activity.MainActivity"> <!-- Optional: for Up navigation -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Activity.EditProfileActivity"
+            android:label="Edit Profile"
+            android:parentActivityName=".Activity.ProfileActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activity.ProfileActivity" />
+        </activity>
 
         <meta-data
             android:name="com.mapbox.token"
             android:value="@string/mapbox_access_token"/>
     </application>
+
 
 </manifest>

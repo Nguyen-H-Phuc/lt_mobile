@@ -59,5 +59,6 @@ dependencies {
     implementation libs.lifecycle.runtime.android
     implementation libs.play.services.location
     implementation libs.core
-
+    implementation libs.firebase.firestore
+    implementation libs.firebase.storage
 }

@@ -47,6 +47,10 @@
             android:exported="false"/>
         <activity android:name=".Activity.OrderSuccessActivity"
             android:exported="false"/>
+        <activity android:name=".Activity.MyOrdersActivity"
+            android:exported="false"/>
+        <activity android:name=".Activity.TrackOrderActivity"
+            android:exported="false"/>
         <activity
             android:name=".Activity.IntroActivity"
             android:exported="true">

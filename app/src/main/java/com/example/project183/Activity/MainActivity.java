@@ -59,6 +59,10 @@ public class MainActivity extends BaseActivity {
                 else {
                     binding.textView2.setText("");
                 }
+                binding.imageView5.setOnClickListener(v -> {
+                    // Mở màn hình Lịch sử đơn hàng (MyOrdersActivity)
+                    startActivity(new Intent(MainActivity.this, MyOrdersActivity.class));
+                });
             }
             // Không tìm thấy người dùng thì để trống
             else {

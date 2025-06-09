@@ -29,9 +29,13 @@ android {
     }
     buildFeatures{
         viewBinding true
+        mlModelBinding true
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    aaptOptions {
+        noCompress "tflite"
     }
 }
 
@@ -61,4 +65,7 @@ dependencies {
     implementation libs.core
     implementation libs.firebase.firestore
     implementation libs.firebase.storage
+    implementation libs.image.labeling.custom
+    implementation libs.tensorflow.lite.support
+    implementation libs.tensorflow.lite.metadata
 }

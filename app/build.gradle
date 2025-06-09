@@ -29,9 +29,13 @@ android {
     }
     buildFeatures{
         viewBinding true
+        mlModelBinding true
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    aaptOptions {
+        noCompress "tflite"
     }
 }
 
@@ -61,9 +65,9 @@ dependencies {
     implementation libs.core
     implementation libs.firebase.firestore
     implementation libs.firebase.storage
-}
-dependencies {
-    // ... các thư viện khác
+    implementation libs.image.labeling.custom
+    implementation libs.tensorflow.lite.support
+    implementation libs.tensorflow.lite.metadata
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 }

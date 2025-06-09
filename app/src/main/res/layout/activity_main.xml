@@ -90,23 +90,58 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <EditText
-                android:id="@+id/editTextText"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/white_bg"
-                android:drawableStart="@drawable/search_icon"
-                android:drawablePadding="8dp"
-                android:ems="10"
-                android:hint="What do you want eat today?"
-                android:inputType="text"
-                android:padding="8dp"
-                android:textColor="@color/dark_blue"
-                android:textColorHint="@color/dark_blue"
-                android:textSize="14sp" />
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp">
+
+                <!-- EditText -->
+                <EditText
+                    android:id="@+id/searchEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/white_bg"
+                    android:hint="What do you want eat today?"
+                    android:paddingStart="40dp"
+                    android:paddingEnd="40dp"
+                    android:textColor="@color/dark_blue"
+                    android:textColorHint="@color/dark_blue"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Icon tìm kiếm (click được) -->
+                <ImageView
+                    android:id="@+id/searchIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/search_icon"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Search"
+                    app:layout_constraintBottom_toBottomOf="@+id/searchEditText"
+                    app:layout_constraintStart_toStartOf="@+id/searchEditText"
+                    app:layout_constraintTop_toTopOf="@+id/searchEditText"
+                    android:layout_marginStart="8dp"/>
+
+                <!-- Icon máy ảnh (click được) -->
+                <ImageView
+                    android:id="@+id/photoIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/outline_add_a_photo_24"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Camera"
+                    app:layout_constraintBottom_toBottomOf="@+id/searchEditText"
+                    app:layout_constraintEnd_toEndOf="@+id/searchEditText"
+                    app:layout_constraintTop_toTopOf="@+id/searchEditText"
+                    android:layout_marginEnd="8dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

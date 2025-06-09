@@ -17,6 +17,15 @@ public class Foods implements Serializable {
     private int TimeValue;
     private String Title;
     private int numberInCart;
+    private int quantity;
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public Foods() {
     }

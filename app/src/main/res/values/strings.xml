@@ -30,6 +30,12 @@
     <string name="checkout_estimated_delivery_time">Delivery time</string>
     <string name="checkout_total_price">Total</string>
     <string name="checkout_order_btn">Order</string>
+
+    <string name="default_web_client_id" translatable="false">501195817554-2vn7c6s109srca2dic4ch9b3ogddeg6k.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">1261374049035159</string>
+    <string name="facebook_client_token">YOUR_CLIENT_TOKEN</string>
+    <string name="fb_login_protocol_scheme">fb1261374049035159</string>
     <!-- active_list_food -->
     <string name="list_food_title">Kết quả cho: %1$s</string>
+
 </resources>

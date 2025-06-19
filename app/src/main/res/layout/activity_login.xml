@@ -7,71 +7,154 @@
     android:layout_height="match_parent"
     tools:context=".Activity.IntroActivity">
 
+    <!-- Ảnh nền vẫn nằm ở lớp dưới cùng -->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@null"
         android:scaleType="fitXY"
         android:src="@drawable/orange_background"
-        android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtLoginTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/signInTitle"
-        android:textColor="@color/dark_blue"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/bicycle"
-        android:contentDescription="@null"
-        app:layout_constraintBottom_toTopOf="@+id/edtPhone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/edtPhone"
-        android:layout_width="320dp"
-        android:layout_height="50dp"
-        android:background="@drawable/white_bg"
-        android:drawablePadding="8dp"
-        android:autofillHints=""
-        android:hint="@string/edtPhone"
-        android:inputType="phone"
-        android:digits="0123456789"
-        android:maxLength="10"
-        android:padding="10dp"
-        android:textColor="@color/dark_blue"
-        android:textColorHint="@color/dark_blue"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        style="@style/OtpBtnStyle"
-        android:id="@+id/btnSendOTP"
-        android:layout_margin="16dp"
-        android:text="@string/btnSendOTP"
+    <!-- ScrollView để nội dung có thể cuộn -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtPhone"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Một ConstraintLayout con bên trong ScrollView để chứa tất cả các phần tử -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/txtLoginTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/signInTitle"
+                android:textColor="@color/dark_blue"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@null"
+                android:maxHeight="220dp"
+                android:src="@drawable/bicycle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtLoginTitle"
+                app:layout_constraintWidth_percent="0.7" />
+
+            <EditText
+                android:id="@+id/edtPhone"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:autofillHints=""
+                android:background="@drawable/white_bg"
+                android:digits="0123456789"
+                android:drawablePadding="8dp"
+                android:hint="@string/edtPhone"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:padding="10dp"
+                android:textColor="@color/dark_blue"
+                android:textColorHint="@color/dark_blue"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                app:layout_constraintWidth_percent="0.9" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSendOTP"
+                style="@style/OtpBtnStyle"
+                android:layout_width="0dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/btnSendOTP"
+                app:layout_constraintEnd_toEndOf="@+id/edtPhone"
+                app:layout_constraintStart_toStartOf="@+id/edtPhone"
+                app:layout_constraintTop_toBottomOf="@+id/edtPhone" />
+
+            <TextView
+                android:id="@+id/orTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Hoặc đăng nhập với"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnSendOTP" />
+
+            <LinearLayout
+                android:id="@+id/socialLoginLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/orTextView">
+
+                <Button
+                    android:id="@+id/googleSignInButton"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#DB4437"
+                    android:drawableStart="@drawable/ic_google"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="Google"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/facebookSignInButton"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#4267B2"
+                    android:drawableStart="@drawable/ic_facebook"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="Facebook"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <!-- (MỚI) ĐOẠN MÃ ĐƯỢC THÊM VÀO ĐÂY -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

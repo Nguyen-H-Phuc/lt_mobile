@@ -1,21 +1,20 @@
-package com.example.project183.Activity; // <-- THAY THẾ BẰNG PACKAGE CỦA BẠN
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+package com.example.project183.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.project183.R; // <-- THAY THẾ BẰNG PACKAGE CỦA BẠN
-import com.example.project183.service.UserAuthService; // <-- GIỮ NGUYÊN
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.example.project183.Activity.MainActivity;
+import com.example.project183.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -27,128 +26,100 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "RegisterActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    // --- Views ---
-    private EditText edtPhone;
-    private Button btnSendOTP, googleSignInButton, facebookSignInButton;
+    // Views
+    private TextInputEditText emailEditText, passwordEditText, confirmPasswordEditText;
+    private Button registerButton, googleSignInButton, facebookSignInButton;
     private ProgressBar progressBar;
 
-    // --- Phone Auth ---
-    private String phoneNumber;
-    private UserAuthService userAuthService;
-
-    // --- Social Login ---
+    // Firebase
     private FirebaseAuth mAuth;
+
+    // Google Sign In
     private GoogleSignInClient mGoogleSignInClient;
+
+    // Facebook Sign In
     private CallbackManager mCallbackManager;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Đảm bảo bạn sử dụng layout có chứa tất cả các nút
-        setContentView(R.layout.activity_login); // Hoặc activity_intro.xml
+        setContentView(R.layout.activity_register);
 
         // --- Khởi tạo ---
-        userAuthService = new UserAuthService();
         mAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
 
         // --- Ánh xạ Views ---
-        edtPhone = findViewById(R.id.edtPhone);
-        btnSendOTP = findViewById(R.id.btnSendOTP);
+        emailEditText = findViewById(R.id.emailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
+        registerButton = findViewById(R.id.registerButton);
         googleSignInButton = findViewById(R.id.googleSignInButton);
         facebookSignInButton = findViewById(R.id.facebookSignInButton);
         progressBar = findViewById(R.id.progressBar);
 
         // --- Cấu hình Google Sign-In ---
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(getString(R.string.default_web_client_id)) // Lấy từ file values/strings.xml (do google-services plugin tạo)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // --- Thiết lập sự kiện click ---
-        setupClickListeners();
-    }
-
-    private void setupClickListeners() {
-        // 1. Sự kiện cho đăng nhập bằng SĐT
-        btnSendOTP.setOnClickListener(v -> handlePhoneLogin());
-
-        // 2. Sự kiện cho đăng nhập Google
+        registerButton.setOnClickListener(v -> registerWithEmail());
         googleSignInButton.setOnClickListener(v -> signInWithGoogle());
-
-        // 3. Sự kiện cho đăng nhập Facebook
         facebookSignInButton.setOnClickListener(v -> signInWithFacebook());
     }
 
-    // =========================================================================================
-    // VÙNG LOGIC XỬ LÝ ĐĂNG NHẬP BẰNG SỐ ĐIỆN THOẠI (GIỮ NGUYÊN)
-    // =========================================================================================
+    private void registerWithEmail() {
+        String email = emailEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+        String confirmPassword = confirmPasswordEditText.getText().toString().trim();
 
-    private void handlePhoneLogin() {
-        phoneNumber = edtPhone.getText().toString().trim();
-        if (phoneNumber.startsWith("0")) {
-            phoneNumber = phoneNumber.substring(1);
+        // Kiểm tra dữ liệu
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
+            Toast.makeText(this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            return;
         }
-        if (!phoneNumber.isEmpty()) {
-            progressBar.setVisibility(View.VISIBLE); // Hiển thị progressbar
-            userAuthService.startPhoneNumberVerification(LoginActivity.this,
-                    "+84" + phoneNumber,
-                    callbacks);
-        } else {
-            Toast.makeText(this, "Vui lòng nhập số điện thoại", Toast.LENGTH_SHORT).show();
+        if (password.length() < 6) {
+            Toast.makeText(this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
+            return;
         }
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    progressBar.setVisibility(View.GONE);
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "createUserWithEmail:success");
+                        updateUI(mAuth.getCurrentUser());
+                    } else {
+                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                        Toast.makeText(RegisterActivity.this, "Đăng ký thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
-
-    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks =
-            new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                @Override
-                public void onVerificationCompleted(@NonNull com.google.firebase.auth.PhoneAuthCredential credential) {
-                    // Hiếm khi xảy ra, nhưng nếu có thì tự động đăng nhập
-                    Log.d(TAG, "onVerificationCompleted:" + credential);
-                    progressBar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onVerificationFailed(@NonNull FirebaseException e) {
-                    progressBar.setVisibility(View.GONE);
-                    Log.w(TAG, "onVerificationFailed", e);
-                    Toast.makeText(LoginActivity.this, "Gửi OTP thất bại: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onCodeSent(@NonNull String verificationId,
-                                       @NonNull PhoneAuthProvider.ForceResendingToken token) {
-                    progressBar.setVisibility(View.GONE);
-                    Log.d(TAG, "onCodeSent:" + verificationId);
-                    Intent intent = new Intent(LoginActivity.this, OTPVerificationActivity.class);
-                    intent.putExtra("verificationId", verificationId);
-                    intent.putExtra("phoneNumber", phoneNumber);
-                    startActivity(intent);
-                }
-            };
-
-
-    // =========================================================================================
-    // VÙNG LOGIC XỬ LÝ ĐĂNG NHẬP GOOGLE & FACEBOOK (THÊM VÀO)
-    // =========================================================================================
 
     private void signInWithGoogle() {
         progressBar.setVisibility(View.VISIBLE);
@@ -162,19 +133,22 @@ public class LoginActivity extends AppCompatActivity {
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(LoginActivity.this, "Đăng nhập Facebook bị hủy.", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "facebook:onCancel");
+                Toast.makeText(RegisterActivity.this, "Đăng nhập Facebook bị hủy.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(@NonNull FacebookException error) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(LoginActivity.this, "Lỗi đăng nhập Facebook.", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "facebook:onError", error);
+                Toast.makeText(RegisterActivity.this, "Lỗi đăng nhập Facebook.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -190,10 +164,14 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
+                // Đăng nhập Google thành công, bây giờ xác thực với Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
+                // Đăng nhập Google thất bại
                 progressBar.setVisibility(View.GONE);
+                Log.w(TAG, "Google sign in failed", e);
                 Toast.makeText(this, "Đăng nhập Google thất bại.", Toast.LENGTH_SHORT).show();
             }
         }
@@ -203,10 +181,12 @@ public class LoginActivity extends AppCompatActivity {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
+                    progressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
+                        Log.d(TAG, "signInWithGoogle:success");
                         updateUI(mAuth.getCurrentUser());
                     } else {
-                        progressBar.setVisibility(View.GONE);
+                        Log.w(TAG, "signInWithGoogle:failure", task.getException());
                         Toast.makeText(this, "Xác thực Google thất bại.", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -216,21 +196,21 @@ public class LoginActivity extends AppCompatActivity {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
+                    progressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
+                        Log.d(TAG, "signInWithFacebook:success");
                         updateUI(mAuth.getCurrentUser());
                     } else {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(this, "Xác thực Facebook thất bại.", Toast.LENGTH_SHORT).show();
+                        Log.w(TAG, "signInWithFacebook:failure", task.getException());
+                        Toast.makeText(RegisterActivity.this, "Xác thực Facebook thất bại.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    // Phương thức chung để điều hướng sau khi đăng nhập thành công bằng mạng xã hội
     private void updateUI(FirebaseUser user) {
-        progressBar.setVisibility(View.GONE);
         if (user != null) {
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
